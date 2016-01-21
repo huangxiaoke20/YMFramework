@@ -22,6 +22,16 @@
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[YMFrameworkConfig sharedInstance] setupProductByID:@"5679842990210161107"
+                                                 version:@"0"
+                                                 channel:@"0"];
+    [YMAnalytics setUMengAppKey:@""
+                      channelID:@""];
+#ifdef DEBUG
+    [YMAnalytics setDebugMode:YES];
+#endif
+    [YMAnalytics startReport];
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[TestThreePlatformViewController alloc] init];
 //    self.window.rootViewController = [[ViewController alloc] init];
@@ -29,13 +39,19 @@
     return YES;
 }
 
-
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *,id> *)options
+- (BOOL)application:(UIApplication *)application
+            openURL:(nonnull NSURL *)url
+  sourceApplication:(nullable NSString *)sourceApplication
+         annotation:(nonnull id)annotation
 {
     return [YMThirdPlatformTool handleURL:url];
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(nonnull NSURL *)url
+            options:(nonnull NSDictionary<NSString *,id> *)options
+{
+    return [YMThirdPlatformTool handleURL:url];
+}
 
 @end
