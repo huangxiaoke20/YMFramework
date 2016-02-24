@@ -57,8 +57,6 @@ static NSTimer *kTimer = nil;
 static NSString *kURL_Domain_Indeed = nil;
 static NSString *kURL_Domain_IP_Indeed = nil;
 
-static dispatch_source_t KTimerSource;
-
 #pragma mark - public method
 
 + (void)load
@@ -179,12 +177,12 @@ static dispatch_source_t KTimerSource;
 + (void)setCurrentTimer
 {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    KTimerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(KTimerSource, dispatch_walltime(DISPATCH_TIME_NOW, 0), 1 * NSEC_PER_SEC, 0);
-    dispatch_source_set_event_handler(KTimerSource, ^{
+    dispatch_source_t timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+    dispatch_source_set_timer(timerSource, dispatch_walltime(DISPATCH_TIME_NOW, 0), 1 * NSEC_PER_SEC, 0);
+    dispatch_source_set_event_handler(timerSource, ^{
         kCurrentUTCTime += 1;
     });
-    dispatch_resume(KTimerSource);
+    dispatch_resume(timerSource);
 }
 
 + (void)reportActionsIfLastEnterBackgroundReportFail
